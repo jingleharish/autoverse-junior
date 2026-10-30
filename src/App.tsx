@@ -1,5 +1,5 @@
 import {useEffect,useState} from 'react';
-import {BookOpen,Box,CarFront,Check,ChevronRight,CircleHelp,Eye,Focus,GraduationCap,Layers,Lightbulb,MousePointer2,Play,Pause,RotateCcw,Save,Settings2,ShieldCheck,Wrench,Zap} from 'lucide-react';
+import {BookOpen,Box,CarFront,Check,ChevronRight,CircleHelp,Eye,Focus,GraduationCap,Layers,Lightbulb,MousePointer2,Play,Pause,RotateCcw,Settings2,ShieldCheck,Wrench,Zap} from 'lucide-react';
 import {CarScene} from './components/CarScene';
 import {MotorLab} from './components/MotorLab';
 import {parts,getPart,type PartId} from './content/parts';
