@@ -1,0 +1,57 @@
+# AutoVerse Junior — M1 Engineering Garage
+
+Interactive desktop-first automobile engineering academy (React 19 + TypeScript + Vite + React Three Fiber). This is an actual real-time 3D application; it does not use still images as a car substitute.
+
+## Requirements
+
+- Node.js 20.19+ or 22.12+
+- Modern desktop browser with WebGL2, mouse and keyboard
+
+## Run
+
+```bash
+npm install
+npm run dev
+```
+
+Open the URL printed by Vite (normally http://localhost:5173).
+
+## Validate
+
+```bash
+npm run test
+npm run build
+npm run preview
+```
+
+## What's implemented
+
+- Real-time orbital 3D EV model created from individually selectable Three.js geometries (chassis, body, motor, battery, tyres/wheels, braking, steering and suspension)
+- X-ray body mode, exploded assemblies and mouse-based mesh selection
+- Descriptions and system connections for eight components
+- Independent motor cutaway laboratory, animated rotor, adjustable speed, pause, knowledge check
+- EV workshop: rear motor and central battery installation; incompatible front mount rejected with explanation
+- IndexedDB saving and automatic restoration in the same browser
+- Responsive desktop garage UI and six unit tests covering assembly compatibility
+
+## Important M1 boundaries
+
+**Model fidelity:** The bundled car is a detailed, self-contained *procedural engineering visualization*, not a photogrammetric or manufacturer-accurate GLB vehicle. It is made of real selectable 3D meshes (not an image, sprite, or 2D placeholder). To achieve production automotive realism, replace the geometry with properly licensed GLB subassemblies using the identifiers in `src/content/parts.ts` and the model hierarchy in the blueprint. The application functions without external car model downloads.
+
+**Mechanical behavior:** The drivetrain and mounting points are educational approximations. There is no 3D driving, full drivetrain physics, vehicle safety certification, or real-world repair guidance in M1. The motor demonstration animates a simplified rotor and stator rather than solving electromagnetic fields. The assembly action fits parts via validated snap locations rather than physics manipulation.
+
+**Persistence:** Saved to IndexedDB on the user's browser only. Clearing site data removes the saved garage. No account sync or analytics.
+
+## Architecture
+
+- `src/components/CarScene.tsx` — component-based WebGL vehicle and selection
+- `src/components/MotorLab.tsx` — independently animated motor cutaway
+- `src/content/parts.ts` — eight educational component definitions
+- `src/engine/assembly.ts` — installation compatibility rules
+- `src/engine/store.ts` — garage and learning state
+- `src/storage/db.ts` — IndexedDB versioned storage
+- `src/tests/assembly.test.ts` — deterministic assembly validation
+
+## Next release
+
+M2 adds eight independently installable assemblies, proper named GLB assets and an end-to-end vehicle inspection flow before the M3 driving simulator.
