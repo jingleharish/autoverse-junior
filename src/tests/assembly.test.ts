@@ -1,10 +1,20 @@
 import {describe,it,expect} from 'vitest';
-import {DEFAULT_BUILD,validateInstallation,installPart,isInstalled} from '../engine/assembly';
+import {DEFAULT_BUILD,validateInstallation,installPart,isInstalled,assemblySteps,inspectPart,removePart,missionComplete,migrateBuild} from '../engine/assembly';
+const foundation=installPart(DEFAULT_BUILD,'chassis','chassis-jig',0);
+const completeBuild=()=>assemblySteps.reduce((build,step)=>installPart(build,step.partId,step.slot,1),DEFAULT_BUILD);
 describe('engineering assembly validation',()=>{
- it('accepts motor on its rear mount',()=>{expect(validateInstallation(DEFAULT_BUILD,'motor','rear-motor-mount').ok).toBe(true)});
+ it('accepts motor on its rear mount after the chassis',()=>{expect(validateInstallation(foundation,'motor','rear-motor-mount').ok).toBe(true)});
  it('rejects incorrect mount with explanation',()=>{const v=validateInstallation(DEFAULT_BUILD,'motor','front-motor-mount');expect(v.ok).toBe(false);expect(v.reason).toMatch(/rear/i)});
- it('fits battery only in the protected tray',()=>{expect(validateInstallation(DEFAULT_BUILD,'battery','battery-tray').ok).toBe(true);expect(validateInstallation(DEFAULT_BUILD,'battery','rear-motor-mount').ok).toBe(false)});
- it('preserves immutable build and prevents duplicates',()=>{const next=installPart(DEFAULT_BUILD,'motor','rear-motor-mount',123);expect(isInstalled(DEFAULT_BUILD,'motor')).toBe(false);expect(isInstalled(next,'motor')).toBe(true);expect(next.updatedAt).toBe(123);expect(()=>installPart(next,'motor','rear-motor-mount')).toThrow(/already installed/)});
+ it('fits battery only in the protected tray',()=>{expect(validateInstallation(foundation,'battery','battery-tray').ok).toBe(true);expect(validateInstallation(foundation,'battery','rear-motor-mount').ok).toBe(false)});
+ it('preserves immutable build and prevents duplicates',()=>{const next=installPart(foundation,'motor','rear-motor-mount',123);expect(isInstalled(foundation,'motor')).toBe(false);expect(isInstalled(next,'motor')).toBe(true);expect(next.updatedAt).toBe(123);expect(()=>installPart(next,'motor','rear-motor-mount')).toThrow(/already installed/)});
  it('prevents unsupported installation',()=>{expect(validateInstallation(DEFAULT_BUILD,'wheels','rear-motor-mount').ok).toBe(false)});
- it('retains independent battery and motor installations',()=>{const a=installPart(DEFAULT_BUILD,'motor','rear-motor-mount',1);const b=installPart(a,'battery','battery-tray',2);expect(b.installed).toHaveLength(2)})
+ it('retains independent battery and motor installations',()=>{const a=installPart(foundation,'motor','rear-motor-mount',1);const b=installPart(a,'battery','battery-tray',2);expect(b.installed).toHaveLength(3)});
+ it('requires suspension, brakes and steering before wheels',()=>{const verdict=validateInstallation(foundation,'wheels','wheel-hubs');expect(verdict.ok).toBe(false);expect(verdict.reason).toMatch(/Disc braking/)});
+ it('requires every internal system before the body',()=>{expect(validateInstallation(foundation,'body','body-mounts').ok).toBe(false);expect(completeBuild().installed).toHaveLength(8)});
+ it('blocks inspection until assembly is complete',()=>{expect(()=>inspectPart(foundation,'chassis')).toThrow(/eight/)});
+ it('records eight unique inspections before mission completion',()=>{let build=completeBuild();expect(missionComplete(build)).toBe(false);for(const step of assemblySteps)build=inspectPart(build,step.partId);expect(missionComplete(build)).toBe(true);expect(inspectPart(build,'motor').inspection).toHaveLength(8)});
+ it('removes dependent systems and invalidates inspection',()=>{const complete=assemblySteps.reduce((b,s)=>inspectPart(b,s.partId),completeBuild());const next=removePart(complete,'suspension');expect(next.installed.map(x=>x.partId).sort()).toEqual(['battery','chassis','motor']);expect(next.inspection).toEqual([]);expect(complete.installed).toHaveLength(8)});
+ it('removing the chassis removes the entire build',()=>{expect(removePart(completeBuild(),'chassis').installed).toEqual([])});
+ it('preserves M1 saves and adds their prepared rolling chassis once',()=>{const legacy={id:'starter-ev',name:'My First EV',installed:[{partId:'motor' as const,slot:'rear-motor-mount' as const}],updatedAt:42};const migrated=migrateBuild(legacy);expect(migrated.installed).toHaveLength(6);expect(isInstalled(migrated,'motor')).toBe(true);expect(migrateBuild(migrated)).toEqual(migrated)});
+ it('keeps a new empty M2 save empty',()=>{expect(migrateBuild(DEFAULT_BUILD).installed).toEqual([])});
 });

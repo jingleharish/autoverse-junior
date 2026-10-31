@@ -1,4 +1,4 @@
-# AutoVerse Junior — M1 Engineering Garage
+# AutoVerse Junior — M2 Assembly & Inspection
 
 Interactive desktop-first automobile engineering academy (React 19 + TypeScript + Vite + React Three Fiber). This is an actual real-time 3D application; it does not use still images as a car substitute.
 
@@ -30,11 +30,14 @@ npm run preview
 - X-ray body mode, exploded assemblies and mouse-based mesh selection
 - Descriptions and system connections for eight components
 - Independent motor cutaway laboratory, animated rotor, adjustable speed, pause, knowledge check
-- EV workshop: rear motor and central battery installation; incompatible front mount rejected with explanation
+- Eight-part workshop with dependency-aware installation, named mount guides, and visible part-by-part assembly
+- Remove assemblies with dependent systems; confirmation before removal or full reset
+- Vehicle inspection checklist for all eight systems and a saved mission-completion record
+- Automatic migration of M1 motor/battery saves, preserving the prepared rolling chassis
 - IndexedDB saving and automatic restoration in the same browser
-- Responsive desktop garage UI and six unit tests covering assembly compatibility
+- Responsive desktop garage UI and fourteen tests covering assembly, dependencies, removal, inspection and save migration
 
-## Important M1 boundaries
+## Model and learning boundaries
 
 **Model fidelity:** The bundled car is a detailed, self-contained *procedural engineering visualization*, not a photogrammetric or manufacturer-accurate GLB vehicle. It is made of real selectable 3D meshes (not an image, sprite, or 2D placeholder). To achieve production automotive realism, replace the geometry with properly licensed GLB subassemblies using the identifiers in `src/content/parts.ts` and the model hierarchy in the blueprint. The application functions without external car model downloads.
 
@@ -54,4 +57,4 @@ npm run preview
 
 ## Next release
 
-M2 adds eight independently installable assemblies, proper named GLB assets and an end-to-end vehicle inspection flow before the M3 driving simulator.
+M2 assembly and inspection use the existing self-contained procedural model. Each assembly has a stable `assembly-<partId>` scene name for a future licensed GLB replacement. Manufacturer-quality GLB assets and the M3 driving simulator remain future work; no external model download is required for this release.

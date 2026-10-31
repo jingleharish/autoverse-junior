@@ -1,0 +1,13 @@
+.workspace{align-items:start}
+.mission-progress{display:grid;gap:9px;margin:20px 0;color:#9fead5;font-size:13px}
+.mission-progress progress{width:100%;height:7px;accent-color:#80eacb;border:0;border-radius:8px;overflow:hidden;background:#243e48}
+.mission-progress progress::-webkit-progress-bar{background:#243e48}.mission-progress progress::-webkit-progress-value{background:#80eacb}
+.assembly-list{padding:0;margin:16px 0;list-style:none;display:grid;gap:6px}
+.assembly-step{width:100%;display:flex;gap:9px;align-items:center;border:1px solid #2b414e;border-radius:8px;background:#14232f;color:#c9dbe3;text-align:left;padding:10px}
+.assembly-step:hover,.assembly-step.active{border-color:#66cdb7;background:#1b3942}
+.assembly-step>span:nth-child(2){flex:1}.assembly-step strong,.assembly-step small{display:block}.assembly-step strong{font-size:12px}.assembly-step small{font-size:11px;color:#9bb2bd;margin-top:4px}
+.step-number{display:grid;place-items:center;flex:0 0 26px;height:26px;border-radius:50%;background:#2a4051;color:#bcd0dc;font-size:12px}.step-number.complete{background:#24564b;color:#9bffe0}
+.step-detail{padding:16px;border:1px solid #365660;border-radius:10px;background:#152d38;margin:18px 0}.step-detail h3{font-family:'Space Grotesk',sans-serif;font-size:19px;margin:8px 0 12px}.step-detail .subheading{margin:0}.step-detail .primary{margin-top:16px}.step-detail p.dependency-note{color:#f1c98e;margin-top:12px;font-size:12px}
+.confirm-actions{padding:12px;margin:12px 0;border:1px solid #8c7150;border-radius:8px}.completion-card{padding:24px 14px;margin:18px 0;text-align:center;border:1px solid #5bcba8;border-radius:12px;background:linear-gradient(130deg,#19463c,#163240);color:#9df1d6}.completion-card h3{font-family:'Space Grotesk';font-size:22px}.completion-card small{display:block;margin-top:12px;color:#afc6c4}
+@media(min-width:951px){.workshop .assembly-list{max-height:300px;overflow:auto;scrollbar-width:thin}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
